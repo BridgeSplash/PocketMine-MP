@@ -25,6 +25,7 @@ namespace pocketmine\command\defaults;
 
 use pocketmine\command\CommandSender;
 use pocketmine\lang\KnownTranslationFactory;
+use pocketmine\network\mcpe\ProtocolInfoHelper;
 use pocketmine\network\mcpe\protocol\ProtocolInfo;
 use pocketmine\permission\DefaultPermissionNames;
 use pocketmine\plugin\Plugin;
@@ -64,6 +65,11 @@ class VersionCommand extends VanillaCommand{
 				TextFormat::GREEN . ProtocolInfo::MINECRAFT_VERSION_NETWORK . TextFormat::RESET,
 				TextFormat::GREEN . ProtocolInfo::CURRENT_PROTOCOL . TextFormat::RESET
 			));
+			$sender->sendMessage("Accepted Bedrock versions: " . TextFormat::GREEN . ProtocolInfoHelper::getAcceptedMinecraftVersionRange() . TextFormat::RESET);
+			$sender->sendMessage("Accepted Bedrock versions list: " . TextFormat::GREEN . ProtocolInfoHelper::getAcceptedMinecraftVersionsList() . TextFormat::RESET);
+			if(ProtocolInfoHelper::isAcceptedProtocol(ProtocolInfoHelper::PROTOCOL_1_19_80)){
+				$sender->sendMessage("Legacy Bedrock compatibility: " . TextFormat::YELLOW . "1.19.80 (experimental)" . TextFormat::RESET);
+			}
 			$sender->sendMessage(KnownTranslationFactory::pocketmine_command_version_phpVersion(TextFormat::GREEN . PHP_VERSION . TextFormat::RESET));
 
 			$jitMode = Utils::getOpcacheJitMode();

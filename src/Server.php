@@ -55,6 +55,7 @@ use pocketmine\network\mcpe\compression\CompressBatchPromise;
 use pocketmine\network\mcpe\compression\CompressBatchTask;
 use pocketmine\network\mcpe\compression\Compressor;
 use pocketmine\network\mcpe\compression\ZlibCompressor;
+use pocketmine\network\mcpe\ProtocolInfoHelper;
 use pocketmine\network\mcpe\convert\TypeConverter;
 use pocketmine\network\mcpe\encryption\EncryptionContext;
 use pocketmine\network\mcpe\EntityEventBroadcaster;
@@ -932,6 +933,11 @@ class Server{
 			$this->memoryManager = new MemoryManager($this);
 
 			$this->logger->info($this->language->translate(KnownTranslationFactory::pocketmine_server_start(TextFormat::AQUA . $this->getVersion() . TextFormat::RESET)));
+			$this->logger->info("Accepted Bedrock versions: " . ProtocolInfoHelper::getAcceptedMinecraftVersionRange());
+			$this->logger->info("Accepted Bedrock versions list: " . ProtocolInfoHelper::getAcceptedMinecraftVersionsList());
+			if(ProtocolInfoHelper::isAcceptedProtocol(ProtocolInfoHelper::PROTOCOL_1_19_80)){
+				$this->logger->info("Legacy Bedrock compatibility enabled: 1.19.80 (experimental)");
+			}
 
 			if(($poolSize = $this->configGroup->getPropertyString(Yml::SETTINGS_ASYNC_WORKERS, "auto")) === "auto"){
 				$poolSize = 2;
