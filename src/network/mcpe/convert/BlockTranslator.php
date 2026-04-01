@@ -24,6 +24,7 @@ declare(strict_types=1);
 namespace pocketmine\network\mcpe\convert;
 
 use pocketmine\data\bedrock\BedrockDataFiles;
+use pocketmine\data\bedrock\ProtocolCompatData;
 use pocketmine\data\bedrock\block\BlockStateData;
 use pocketmine\data\bedrock\block\BlockStateSerializeException;
 use pocketmine\data\bedrock\block\BlockStateSerializer;
@@ -159,8 +160,14 @@ final class BlockTranslator{
 	private int $fallbackStateId;
 
 	public static function loadFromProtocolId(int $protocolId) : BlockTranslator{
-		$canonicalBlockStatesRaw = Filesystem::fileGetContents(str_replace(".nbt", self::PATHS[$protocolId][self::CANONICAL_BLOCK_STATES_PATH] . ".nbt", BedrockDataFiles::CANONICAL_BLOCK_STATES_NBT));
-		$metaMappingRaw = Filesystem::fileGetContents(str_replace(".json", self::PATHS[$protocolId][self::BLOCK_STATE_META_MAP_PATH] . ".json", BedrockDataFiles::BLOCK_STATE_META_MAP_JSON));
+		$canonicalBlockStatesRaw = Filesystem::fileGetContents(
+			ProtocolCompatData::getCanonicalBlockStatesPath($protocolId) ??
+			str_replace(".nbt", self::PATHS[$protocolId][self::CANONICAL_BLOCK_STATES_PATH] . ".nbt", BedrockDataFiles::CANONICAL_BLOCK_STATES_NBT)
+		);
+		$metaMappingRaw = Filesystem::fileGetContents(
+			ProtocolCompatData::getBlockStateMetaMapPath($protocolId) ??
+			str_replace(".json", self::PATHS[$protocolId][self::BLOCK_STATE_META_MAP_PATH] . ".json", BedrockDataFiles::BLOCK_STATE_META_MAP_JSON)
+		);
 		return new self(
 			BlockStateDictionary::loadFromString($canonicalBlockStatesRaw, $metaMappingRaw),
 			GlobalBlockStateHandlers::getSerializer(),

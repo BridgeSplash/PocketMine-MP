@@ -32,6 +32,7 @@ use pocketmine\data\bedrock\item\ItemTypeSerializeException;
 use pocketmine\data\bedrock\item\SavedItemData;
 use pocketmine\item\Item;
 use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\network\mcpe\ProtocolInfoHelper;
 use pocketmine\network\mcpe\protocol\ProtocolInfo;
 use pocketmine\network\mcpe\protocol\serializer\ItemTypeDictionary;
 use pocketmine\utils\AssumptionFailedError;
@@ -176,6 +177,8 @@ final class ItemTranslator{
 			ProtocolInfo::PROTOCOL_1_20_10 => 121,
 
 			ProtocolInfo::PROTOCOL_1_20_0 => 111,
+
+			ProtocolInfoHelper::PROTOCOL_1_19_80 => 101,
 
 			default => throw new AssumptionFailedError("Unknown protocol ID $protocolId"),
 		};

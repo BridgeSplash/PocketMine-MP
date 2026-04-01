@@ -24,6 +24,7 @@ declare(strict_types=1);
 namespace pocketmine\network\mcpe\convert;
 
 use pocketmine\data\bedrock\BedrockDataFiles;
+use pocketmine\data\bedrock\ProtocolCompatData;
 use pocketmine\errorhandler\ErrorToExceptionHandler;
 use pocketmine\nbt\LittleEndianNbtSerializer;
 use pocketmine\nbt\tag\CompoundTag;
@@ -74,7 +75,10 @@ final class ItemTypeDictionaryFromDataHelper{
 	];
 
 	public static function loadFromProtocolId(int $protocolId) : ItemTypeDictionary{
-		return self::loadFromString(Filesystem::fileGetContents(str_replace(".json", self::PATHS[$protocolId] . ".json", BedrockDataFiles::REQUIRED_ITEM_LIST_JSON)));
+		return self::loadFromString(Filesystem::fileGetContents(
+			ProtocolCompatData::getRequiredItemListPath($protocolId) ??
+			str_replace(".json", self::PATHS[$protocolId] . ".json", BedrockDataFiles::REQUIRED_ITEM_LIST_JSON)
+		));
 	}
 
 	public static function loadFromString(string $data) : ItemTypeDictionary{

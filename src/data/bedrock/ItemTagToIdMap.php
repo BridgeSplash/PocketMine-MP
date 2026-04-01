@@ -74,7 +74,10 @@ final class ItemTagToIdMap{
 	];
 
 	private static function make(int $protocolId) : self{
-		$map = json_decode(Filesystem::fileGetContents(str_replace(".json", self::PATHS[$protocolId] . ".json", BedrockDataFiles::ITEM_TAGS_JSON)), true, flags: JSON_THROW_ON_ERROR);
+		$map = json_decode(Filesystem::fileGetContents(
+			ProtocolCompatData::getItemTagsPath($protocolId) ??
+			str_replace(".json", self::PATHS[$protocolId] . ".json", BedrockDataFiles::ITEM_TAGS_JSON)
+		), true, flags: JSON_THROW_ON_ERROR);
 		if(!is_array($map)){
 			throw new AssumptionFailedError("Invalid item tag map, expected array");
 		}
